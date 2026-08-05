@@ -1,17 +1,19 @@
-name: Test
+name: Test Secrets
 
 on:
   workflow_dispatch:
 
 jobs:
- test:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Show Secret Status
+      - name: Check secrets
         run: |
           echo "SERVER_IP length = ${#SERVER_IP}"
           echo "SERVER_USER length = ${#SERVER_USER}"
+          echo "SERVER_SSH_KEY length = ${#SERVER_SSH_KEY}"
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
