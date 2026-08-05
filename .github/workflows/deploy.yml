@@ -1,19 +1,24 @@
-name: Test Secrets
+name: Deploy to Ubuntu VM
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check secrets
-        run: |
-          echo "SERVER_IP length = ${#SERVER_IP}"
-          echo "SERVER_USER length = ${#SERVER_USER}"
-          echo "SERVER_SSH_KEY length = ${#SERVER_SSH_KEY}"
-        env:
-          SERVER_IP: ${{ secrets.SERVER_IP }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-          SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Ubuntu Server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            echo "Connected successfully!"
